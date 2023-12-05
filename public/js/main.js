@@ -1,69 +1,54 @@
-const deleteBtn = document.querySelectorAll('.del')
-const todoItem = document.querySelectorAll('span.not')
-const todoComplete = document.querySelectorAll('span.completed')
+const deleteBtn = document.querySelectorAll(".del");
+const todoItems = document.querySelectorAll(".todoItem"); // Use .todoItem to target the entire row (checkbox and text)
+const checkboxes = document.querySelectorAll(".checkbox"); // Select all checkboxes
 
-Array.from(deleteBtn).forEach((el)=>{
-    el.addEventListener('click', deleteTodo)
-})
+// Toggle Complete/Incomplete
+Array.from(checkboxes).forEach((checkbox) => {
+  checkbox.addEventListener("click", toggleCompleteStatus);
+});
 
-Array.from(todoItem).forEach((el)=>{
-    el.addEventListener('click', markComplete)
-})
+async function toggleCompleteStatus(event) {
+  const todoId = event.target.dataset.id; // Get the todo ID from the clicked checkbox
+  const isChecked = event.target.checked; // Get the current state of the checkbox
 
-Array.from(todoComplete).forEach((el)=>{
-    el.addEventListener('click', markIncomplete)
-})
+  const url = isChecked ? "/todos/markComplete" : "/todos/markIncomplete"; // Toggle URL based on the state
 
-async function deleteTodo(){
-    const todoId = this.parentNode.dataset.id
-    try{
-        const response = await fetch('todos/deleteTodo', {
-            method: 'delete',
-            headers: {'Content-type': 'application/json'},
-            body: JSON.stringify({
-                'todoIdFromJSFile': todoId
-            })
-        })
-        const data = await response.json()
-        console.log(data)
-        location.reload()
-    }catch(err){
-        console.log(err)
-    }
+  try {
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        todoIdFromJSFile: todoId,
+      }),
+    });
+
+    const data = await response.json();
+    console.log(data);
+    location.reload(); // Reload to reflect the updated state
+  } catch (err) {
+    console.error("Error toggling todo status: ", err);
+  }
 }
 
-async function markComplete(){
-    const todoId = this.parentNode.dataset.id
-    try{
-        const response = await fetch('todos/markComplete', {
-            method: 'put',
-            headers: {'Content-type': 'application/json'},
-            body: JSON.stringify({
-                'todoIdFromJSFile': todoId
-            })
-        })
-        const data = await response.json()
-        console.log(data)
-        location.reload()
-    }catch(err){
-        console.log(err)
-    }
-}
+// Delete Todo
+Array.from(deleteBtn).forEach((el) => {
+  el.addEventListener("click", deleteTodo);
+});
 
-async function markIncomplete(){
-    const todoId = this.parentNode.dataset.id
-    try{
-        const response = await fetch('todos/markIncomplete', {
-            method: 'put',
-            headers: {'Content-type': 'application/json'},
-            body: JSON.stringify({
-                'todoIdFromJSFile': todoId
-            })
-        })
-        const data = await response.json()
-        console.log(data)
-        location.reload()
-    }catch(err){
-        console.log(err)
-    }
+async function deleteTodo() {
+  const todoId = this.closest(".todoItem").dataset.id;
+  try {
+    const response = await fetch("/todos/deleteTodo", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        todoIdFromJSFile: todoId,
+      }),
+    });
+    const data = await response.json();
+    console.log(data);
+    location.reload(); // Reload the page after deletion
+  } catch (err) {
+    console.error("Error deleting todo: ", err);
+  }
 }

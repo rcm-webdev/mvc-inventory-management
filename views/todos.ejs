@@ -1,32 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="css/output.css">
-</head>
-<body>
-    <h1>Todos</h1>
-    <ul>
-    <% todos.forEach( el => { %>
-            <li class='todoItem' data-id='<%=el._id%>'>
-                <span class='<%= el.completed === true ? 'completed' : 'not'%>'><%= el.todo %></span>
-                <span class='del'> Delete </span>
-            </li>
-    <% }) %>    
-    </ul>
+<h1>Todos</h1>
 
-    <h2><%= user.userName %> has <%= left %> things left to do.</h2>
+<div class="overflow-x-auto">
+  <table class="table">
+    <!-- head -->
+    <thead>
+      <tr>
+        <th>Completed?</th>
+        <th>Todo Item</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% todos.forEach(el => { %>
+      <tr data-id="<%= el._id %>" class="todoItem">
+        <td>
+          <label>
+            <input type="checkbox" class="checkbox" <%= el.completed ? 'checked'
+            : '' %> data-id="<%= el._id %>"
+            onclick="toggleCompleteStatus(event)" />
+          </label>
+        </td>
 
-    <form action="/todos/createTodo" method='POST'>
-        <input type="text" placeholder="Enter Todo Item" name='todoItem'>
-        <input class="btn btn-primary" type="submit">
-    </form>
+        <td>
+          <span><%= el.todo %></span>
+        </td>
+        <td>
+          <span class="del btn btn-error">Delete</span>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
 
-    <a href="/logout">Logout</a>
+<h2><%= user.userName %> has <%= left %> things left to do.</h2>
 
-    <script src="js/main.js"></script>
-</body>
-</html>
+<form action="/todos/createTodo" method="POST">
+  <input type="text" placeholder="Enter Todo Item" name="todoItem" />
+  <input class="btn btn-primary" type="submit" />
+</form>
+
+<a href="/logout">Logout</a>
+
+<script src="js/main.js"></script>
