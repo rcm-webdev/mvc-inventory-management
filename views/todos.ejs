@@ -1,45 +1,85 @@
-<h1>Todos</h1>
+<div class="min-w-screen text-center">
+  <h1 class="text-3xl font-bold my-10 text-wrap">
+    Welcome <%= user.userName %>.
+  </h1>
 
-<div class="overflow-x-auto">
-  <table class="table">
-    <!-- head -->
-    <thead>
-      <tr>
-        <th>Completed?</th>
-        <th>Todo Item</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% todos.forEach(el => { %>
-      <tr data-id="<%= el._id %>" class="todoItem">
-        <td>
-          <label>
-            <input type="checkbox" class="checkbox" <%= el.completed ? 'checked'
-            : '' %> data-id="<%= el._id %>"
-            onclick="toggleCompleteStatus(event)" />
-          </label>
-        </td>
+  <div class="overflow-x-auto w-full lg:w-1/2 mx-auto">
+    <table class="table">
+      <!-- head -->
+      <thead>
+        <tr>
+          <th>Completed?</th>
+          <th>Todo Item</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% todos.forEach(el => { %>
+        <tr data-id="<%= el._id %>" class="todoItem">
+          <td>
+            <label>
+              <input type="checkbox" class="checkbox" <%= el.completed ?
+              'checked' : '' %> data-id="<%= el._id %>"
+              onclick="toggleCompleteStatus(event)" />
+            </label>
+          </td>
 
-        <td>
-          <span><%= el.todo %></span>
-        </td>
-        <td>
-          <span class="del btn btn-error">Delete</span>
-        </td>
-      </tr>
-      <% }) %>
-    </tbody>
-  </table>
+          <td>
+            <span><%= el.todo %></span>
+          </td>
+          <td>
+            <span class="del btn btn-error">Delete</span>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="card bg-base-100 w-3/4 lg:w-1/4 mx-auto shrink-0 shadow-2xl">
+    <h1 class="text-2xl font-bold">Create a Todo</h1>
+    <form
+      action="/todos/createTodo"
+      method="POST"
+      class="flex flex-col items-center gap-3 mt-3"
+    >
+      <input
+        type="text"
+        placeholder="Create a Todo"
+        name="todoItem"
+        class="input input-bordered w-full max-w-xs"
+      />
+      <div class="form-control mt-3">
+        <button class="btn btn-wide btn-primary">Create Todo</button>
+      </div>
+
+      <!-- <input class="btn btn-primary btn-wide" type="submit" /> -->
+      <div>
+        <h2>
+          <span class="font-bold text-primary"><%= user.userName %></span> has
+          <%= left %> things left to do.
+        </h2>
+      </div>
+    </form>
+  </div>
+
+  <a href="/logout" class="btn mt-6">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="1em"
+      height="1em"
+      viewBox="0 0 24 24"
+      class="h-6 w-6"
+    >
+      <path
+        fill="currentColor"
+        d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h7v2H5v14h7v2zm11-4l-1.375-1.45l2.55-2.55H9v-2h8.175l-2.55-2.55L16 7l5 5z"
+      />
+    </svg>
+    <span>Logout</span>
+  </a>
+
+  <script src="js/main.js"></script>
 </div>
-
-<h2><%= user.userName %> has <%= left %> things left to do.</h2>
-
-<form action="/todos/createTodo" method="POST">
-  <input type="text" placeholder="Enter Todo Item" name="todoItem" />
-  <input class="btn btn-primary" type="submit" />
-</form>
-
-<a href="/logout">Logout</a>
-
-<script src="js/main.js"></script>
