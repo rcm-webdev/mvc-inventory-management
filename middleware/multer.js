@@ -10,7 +10,9 @@ module.exports = multer({
       ext !== ".jpeg" &&
       ext !== ".png" &&
       ext !== ".gif" &&
-      ext !== ".webp"
+      ext !== ".webp" &&
+      ext !== ".svg" &&
+      ext !== ".mp4"
     ) {
       cb(new Error("File type is not supported"), false);
       return;
