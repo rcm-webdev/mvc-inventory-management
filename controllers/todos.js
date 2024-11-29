@@ -1,4 +1,5 @@
 const Todo = require("../models/Todo");
+const cloudinary = require("../middleware/cloudinary");
 
 module.exports = {
   getTodos: async (req, res) => {
@@ -20,10 +21,15 @@ module.exports = {
   },
   createTodo: async (req, res) => {
     try {
+      // Upload image to cloudinary
+      const result = await cloudinary.uploader.upload(req.file.path);
+
       await Todo.create({
         todo: req.body.todoItem,
         completed: false,
         userId: req.user.id,
+        image: result.secure_url,
+        cloudinaryId: result.public_id,
       });
       console.log("Todo has been added!");
       res.redirect("/todos");
@@ -62,6 +68,9 @@ module.exports = {
   deleteTodo: async (req, res) => {
     console.log(req.body.todoIdFromJSFile);
     try {
+      //Delete image from cloudinary
+      const todo = await Todo.findById(req.body.todoIdFromJSFile);
+      await cloudinary.uploader.destroy(todo.cloudinaryId);
       await Todo.findOneAndDelete({ _id: req.body.todoIdFromJSFile });
       console.log("Deleted Todo");
       res.json("Deleted It");
