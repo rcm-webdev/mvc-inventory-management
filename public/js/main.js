@@ -52,3 +52,40 @@ async function deleteTodo() {
     console.error("Error deleting todo: ", err);
   }
 }
+
+//Drag and Drop
+const dropzone = document.getElementById("dropzone");
+const inputFile = document.getElementById("imageUpload");
+const message = document.getElementById("message");
+
+dropzone.addEventListener("dragenter", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  dropzone.classList.add("drag-over");
+  message.textContent = "Release to upload your image";
+});
+
+dropzone.addEventListener("dragover", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+});
+
+dropzone.addEventListener("dragleave", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  dropzone.classList.remove("drag-over");
+  message.textContent = "Drag and drop an image here";
+});
+
+dropzone.addEventListener("drop", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  dropzone.classList.remove("drag-over");
+
+  const files = e.dataTransfer.files;
+  if (files.length) {
+    inputFile.files = files; // Assign the file to the input
+    message.textContent = `File is ready: ${files[0].name}`;
+    console.log(files[0]); // You can handle the file upload logic here
+  }
+});
