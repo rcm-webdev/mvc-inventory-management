@@ -25,7 +25,14 @@
           </td>
 
           <td>
-            <span><%= el.todo %></span>
+            <div class="card">
+              <div class="card-body">
+                <figure>
+                  <img src="<%= el.image %>" alt="Todo Image" />
+                </figure>
+                <h2 class="card-title"><%= el.todo %></h2>
+              </div>
+            </div>
           </td>
           <td>
             <span class="del btn btn-error">Delete</span>
@@ -42,6 +49,7 @@
     <h1 class="text-2xl font-bold">Create a Todo</h1>
     <form
       action="/todos/createTodo"
+      enctype="multipart/form-data"
       method="POST"
       class="flex flex-col items-center gap-3 mt-3"
     >
@@ -51,8 +59,14 @@
         name="todoItem"
         class="input input-bordered w-full max-w-xs"
       />
+      <div class="mb-3">
+        <label for="imgUpload" class="form-label">Image</label>
+        <input type="file" class="form-control" id="imageUpload" name="file" />
+      </div>
       <div class="form-control mt-3">
-        <button class="btn btn-wide btn-primary">Create Todo</button>
+        <button class="btn btn-wide btn-primary" type="submit" value="Upload">
+          Create Todo
+        </button>
       </div>
 
       <!-- <input class="btn btn-primary btn-wide" type="submit" /> -->
