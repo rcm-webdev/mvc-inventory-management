@@ -11,20 +11,22 @@ async function toggleCompleteStatus(event) {
   const todoId = event.target.dataset.id; // Get the todo ID from the clicked checkbox
   const isChecked = event.target.checked; // Get the current state of the checkbox
 
-  const url = isChecked ? "/todos/markComplete" : "/todos/markIncomplete"; // Toggle URL based on the state
-
   try {
-    const response = await fetch(url, {
+    const response = await fetch("/todos/toggleComplete", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        todoIdFromJSFile: todoId,
+        todoId,
+        isChecked,
       }),
     });
 
+    if (!response.ok) {
+      throw new Error("Error toggling todo status");
+    }
+
     const data = await response.json();
-    console.log(data);
-    location.reload(); // Reload to reflect the updated state
+    console.log(data.message);
   } catch (err) {
     console.error("Error toggling todo status: ", err);
   }
