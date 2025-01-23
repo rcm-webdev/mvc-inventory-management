@@ -8,7 +8,11 @@ const MongoStore = require("connect-mongo");
 const flash = require("express-flash");
 const logger = require("morgan");
 const connectDB = require("./config/database");
+
+//application has two routes:
+// the main route and the todos route
 const mainRoutes = require("./routes/main");
+//you can find the todos route in the todos.js file in the routes folder
 const todoRoutes = require("./routes/todos");
 
 require("dotenv").config({ path: "./config/local.env" });
