@@ -68,9 +68,15 @@ module.exports = {
   deleteTodo: async (req, res) => {
     console.log(req.body.todoIdFromJSFile);
     try {
-      //Delete image from cloudinary
+      //find the todo by id
       const todo = await Todo.findById(req.body.todoIdFromJSFile);
-      await cloudinary.uploader.destroy(todo.cloudinaryId);
+
+      // CHeck if the todo has a cloudinaryId before attempting to delete the image
+      if (todo.cloudinaryId) {
+        await cloudinary.uploader.destroy(todo.cloudinaryId);
+      }
+
+      //Delete the todo from the database
       await Todo.findOneAndDelete({ _id: req.body.todoIdFromJSFile });
       console.log("Deleted Todo");
       res.json("Deleted It");
