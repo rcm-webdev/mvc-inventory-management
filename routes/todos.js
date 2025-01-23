@@ -8,9 +8,7 @@ router.get("/", ensureAuth, todosController.getTodos);
 
 router.post("/createTodo", upload.single("file"), todosController.createTodo);
 
-router.put("/markComplete", todosController.markComplete);
-
-router.put("/markIncomplete", todosController.markIncomplete);
+router.put("/toggleComplete", todosController.toggleComplete);
 
 router.delete("/deleteTodo", todosController.deleteTodo);
 
