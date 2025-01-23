@@ -1,7 +1,11 @@
+//Todo model
 const Todo = require("../models/Todo");
+
+// Cloudinary for image uploads
 const cloudinary = require("../middleware/cloudinary");
 
 module.exports = {
+  // getTodos method retrieves all todos for the logged-in user
   getTodos: async (req, res) => {
     console.log(req.user);
     try {
@@ -24,6 +28,8 @@ module.exports = {
       console.log(err);
     }
   },
+
+  // createTodo method creates a new todo item
   createTodo: async (req, res) => {
     try {
       let result = {};
@@ -47,6 +53,8 @@ module.exports = {
     }
   },
 
+  // toggleComplete method updates the completion status of a todo item
+
   toggleComplete: async (req, res) => {
     try {
       const { todoId, isChecked } = req.body;
@@ -65,6 +73,8 @@ module.exports = {
       res.status(500).json({ error: error.message });
     }
   },
+
+  // deleteTodo method deletes a todo item
   deleteTodo: async (req, res) => {
     console.log(req.body.todoIdFromJSFile);
     try {
