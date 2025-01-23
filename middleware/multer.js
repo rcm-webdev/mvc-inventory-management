@@ -2,21 +2,18 @@ const multer = require("multer");
 const path = require("path");
 
 module.exports = multer({
-  storage: multer.diskStorage({}),
+  storage: multer.diskStorage({}), // In-memory storage, or specify a location if needed
   fileFilter: (req, file, cb) => {
-    let ext = path.extname(file.originalname);
-    if (
-      ext !== ".jpg" &&
-      ext !== ".jpeg" &&
-      ext !== ".png" &&
-      ext !== ".gif" &&
-      ext !== ".webp" &&
-      ext !== ".svg" &&
-      ext !== ".mp4"
-    ) {
-      cb(new Error("File type is not supported"), false);
-      return;
+    if (file) {
+      const ext = path.extname(file.originalname).toLowerCase();
+      if (
+        ![".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg", ".mp4"].includes(
+          ext
+        )
+      ) {
+        return cb(new Error("File type is not supported"), false);
+      }
     }
-    cb(null, true);
+    cb(null, true); // Allow the file (or allow the request even if no file is present)
   },
 });
