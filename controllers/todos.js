@@ -21,20 +21,24 @@ module.exports = {
   },
   createTodo: async (req, res) => {
     try {
-      // Upload image to cloudinary
-      const result = await cloudinary.uploader.upload(req.file.path);
+      let result = {};
+      if (req.file) {
+        // Upload image to cloudinary
+        result = await cloudinary.uploader.upload(req.file.path);
+      }
 
       await Todo.create({
         todo: req.body.todoItem,
         completed: false,
         userId: req.user.id,
-        image: result.secure_url,
-        cloudinaryId: result.public_id,
+        image: result.secure_url || null,
+        cloudinaryId: result.public_id || null,
       });
       console.log("Todo has been added!");
       res.redirect("/todos");
     } catch (err) {
       console.log(err);
+      res.status(500).json({ error: err.message });
     }
   },
   markComplete: async (req, res) => {
