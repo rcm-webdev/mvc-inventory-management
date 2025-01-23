@@ -24,7 +24,8 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(logger("dev"));
-// Sessions
+
+// Sessions: a session middleware to keep track of the user's session
 app.use(
   session({
     secret: "keyboard cat",
