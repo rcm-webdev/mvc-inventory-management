@@ -10,6 +10,11 @@ module.exports = {
         userId: req.user.id,
         completed: false,
       });
+
+      if (req.headers["content-type"] === "application/json") {
+        return res.json({ todos: todoItems, left: itemsLeft });
+      }
+
       res.render("todos.ejs", {
         todos: todoItems,
         left: itemsLeft,
@@ -41,32 +46,23 @@ module.exports = {
       res.status(500).json({ error: err.message });
     }
   },
-  markComplete: async (req, res) => {
+
+  toggleComplete: async (req, res) => {
     try {
+      const { todoId, isChecked } = req.body;
       await Todo.findOneAndUpdate(
-        { _id: req.body.todoIdFromJSFile },
+        { _id: todoId },
         {
-          completed: true,
+          completed: isChecked,
         }
       );
-      console.log("Marked Complete");
-      res.json("Marked Complete");
-    } catch (err) {
-      console.log(err);
-    }
-  },
-  markIncomplete: async (req, res) => {
-    try {
-      await Todo.findOneAndUpdate(
-        { _id: req.body.todoIdFromJSFile },
-        {
-          completed: false,
-        }
-      );
-      console.log("Marked Incomplete");
-      res.json("Marked Incomplete");
-    } catch (err) {
-      console.log(err);
+      const message = isChecked ? "Marked Complete" : "Marked Incomplete";
+      console.log(message);
+
+      res.json({ message });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: error.message });
     }
   },
   deleteTodo: async (req, res) => {
