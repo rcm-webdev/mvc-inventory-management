@@ -1,5 +1,9 @@
+//mongoose helps us connect to the database
+
 const mongoose = require("mongoose");
 
+//mongoose also helps us build up these shcemas to define the structure of our data
+//schemas serve as a blueprint for the data into our template - makes code easy to maintain
 const TodoSchema = new mongoose.Schema({
   todo: {
     type: String,
