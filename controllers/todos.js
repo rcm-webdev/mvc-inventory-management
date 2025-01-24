@@ -7,18 +7,28 @@ const cloudinary = require("../middleware/cloudinary");
 module.exports = {
   // getTodos method retrieves all todos for the logged-in user
   getTodos: async (req, res) => {
+    //req.user is the user object attached to the request, which contains information about the logged-in user
     console.log(req.user);
     try {
+      // Find all todos for the logged-in user
+      //Todo model is used to interact with the database (MongoDB)
+      // The find method retrieves all todos for the logged-in user
+      //userId is used to filter todos by the user who created them, in the models schema
+      //req.user.id is the id of the logged-in user, which is obtained from the request object
+      //we will then store the retrieved todos in the todoItems variable
       const todoItems = await Todo.find({ userId: req.user.id });
+      // Count the number of incomplete todos
       const itemsLeft = await Todo.countDocuments({
         userId: req.user.id,
         completed: false,
       });
-
+      // Check if the request is an AJAX request
+      // If so, respond with JSON
       if (req.headers["content-type"] === "application/json") {
         return res.json({ todos: todoItems, left: itemsLeft });
       }
 
+      // Render the todos page with the retrieved data
       res.render("todos.ejs", {
         todos: todoItems,
         left: itemsLeft,
